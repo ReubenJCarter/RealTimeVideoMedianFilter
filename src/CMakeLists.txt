@@ -1,0 +1,20 @@
+
+set(MedianFilterRealTimeSrc
+	OpenGLDisplay.cpp
+	MedianFilterRealTime.cpp
+	CLHelper.cpp
+)	
+
+add_executable(MedianFilterRealTime ${MedianFilterRealTimeSrc})
+
+target_link_libraries(MedianFilterRealTime DevIL)
+target_link_libraries(MedianFilterRealTime OpenCL)
+target_link_libraries(MedianFilterRealTime opengl32)
+target_link_libraries(MedianFilterRealTime glew32)
+target_link_libraries(MedianFilterRealTime glfw3)
+target_link_libraries(MedianFilterRealTime avcodec)
+target_link_libraries(MedianFilterRealTime avformat)
+target_link_libraries(MedianFilterRealTime swscale)
+target_link_libraries(MedianFilterRealTime avdevice)
+target_link_libraries(MedianFilterRealTime avfilter)
+target_link_libraries(MedianFilterRealTime avutil)
