@@ -1,6 +1,6 @@
 #include "CommonHeader.h"
 #include "CLHelper.h"
-#include "OpenGLDisplay.h"
+#include "OpenGLFilter.h"
 
 unsigned int g_seed = 20324;
 
@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 		return 1; 
 	}
 	
-	float noiseProb = 0.4f;
+	float noiseProb = 0.8f;
 	
 	
 	
@@ -122,8 +122,8 @@ int main(int argc, char *argv[])
 	
 	int W = pCodecCtx->width;
 	int H = pCodecCtx->height;
-	OpenGLDisplay display;
-	display.Init(W, H, "median filter");
+	OpenGLFilter glFilter;
+	glFilter.Init(W, H, "median filter");
 	
 	while(av_read_frame(pFormatCtx, &packet) >= 0) 
 	{
@@ -151,9 +151,9 @@ int main(int argc, char *argv[])
 					buffer[i] = 255; 
 			}
 			
-			display.CopyImageData(pFrameRGB->data[0], W, H);
-			display.Update();
-			if(display.QuitPressed()) break; 
+			glFilter.CopyImageData(pFrameRGB->data[0], W, H);
+			glFilter.Update();
+			if(glFilter.QuitPressed()) break; 
 		}
 	  }
 		
@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
 	  av_free_packet(&packet);
 	}	
 	
-	display.Stop();
+	glFilter.Stop();
 	
 	return 1;
 }

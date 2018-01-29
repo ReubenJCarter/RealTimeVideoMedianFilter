@@ -2,7 +2,7 @@
 
 #include "CommonHeader.h"
 
-class OpenGLDisplay
+class OpenGLFilter
 {
 	public:		
 		GLFWwindow* window;
@@ -11,7 +11,7 @@ class OpenGLDisplay
 		GLuint vao;
 		GLuint texture;
 		
-		OpenGLDisplay();		
+		OpenGLFilter();		
 		bool Init(int W, int H, std::string name);
 		void CopyImageData(void* data, int W, int H);
 		void Update();

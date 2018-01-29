@@ -20,12 +20,6 @@ set(FFMPEG_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ext/ffmpeg/lib CACHE PATH "path t
 include_directories(${FFMPEG_INC_DIR})
 link_directories(${FFMPEG_LIB_DIR})
 
-#Devil
-set(DEVIL_INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ext/DevIL/include  CACHE PATH  "path to Devil include directory")
-set(DEVIL_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ext/DevIL/  CACHE PATH  "path to Devil include directory")
-include_directories(${DEVIL_INC_DIR})
-link_directories(${DEVIL_LIB_DIR})
-
 #Glew
 set(GLEW_INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ext/glew-2.1.0/include  CACHE PATH  "path to Glew include directory")
 set(GLEW_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ext/glew-2.1.0/lib/Release/x64  CACHE PATH  "path to Glew include directory")

@@ -1,13 +1,12 @@
 
 set(MedianFilterRealTimeSrc
-	OpenGLDisplay.cpp
-	MedianFilterRealTime.cpp
+	OpenGLFilter.cpp
+	Main.cpp
 	CLHelper.cpp
 )	
 
 add_executable(MedianFilterRealTime ${MedianFilterRealTimeSrc})
 
-target_link_libraries(MedianFilterRealTime DevIL)
 target_link_libraries(MedianFilterRealTime OpenCL)
 target_link_libraries(MedianFilterRealTime opengl32)
 target_link_libraries(MedianFilterRealTime glew32)
