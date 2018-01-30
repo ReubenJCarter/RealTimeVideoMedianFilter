@@ -6,7 +6,7 @@ OpenGLFilter::OpenGLFilter()
 }
 
 
-bool OpenGLFilter::Init(int W, int H, std::string name)
+bool OpenGLFilter::Init(int W, int H, std::string name, bool fitlerOn)
 {
     /* Initialize the library */
     if (!glfwInit())
@@ -40,7 +40,7 @@ bool OpenGLFilter::Init(int W, int H, std::string name)
 	
 	)";
 	
-	const char* fragment_shader_basic = R"(
+	const char* fragment_shader_nofilter = R"(
 	#version 140
 	in vec2 texco;
 	uniform sampler2D tex;
@@ -86,8 +86,8 @@ bool OpenGLFilter::Init(int W, int H, std::string name)
 	const int size = 5;
 	uniform sampler2D tex;
 	
-	const int WIDTH = 1920;
-	const int HEIGHT = 1080;
+	uniform int WIDTH;
+	uniform int HEIGHT;
 	
 	float MedianR()
 	{
@@ -275,6 +275,9 @@ bool OpenGLFilter::Init(int W, int H, std::string name)
 		float medR = MedianR();
 		float medG = MedianG();
 		float medB = MedianB();
+		//float medR = texture(tex, texco).x;
+		//float medG = texture(tex, texco).y;
+		//float medB = texture(tex, texco).z;
 		glFragColor = vec4(medR, medG, medB, 1.0);
 	})";
 	
@@ -316,7 +319,11 @@ bool OpenGLFilter::Init(int W, int H, std::string name)
 	glShaderSource(vs, 1, &vertex_shader, NULL);
 	glCompileShader(vs);
 	GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fs, 1, &fragment_shader, NULL);
+	
+	if(fitlerOn)
+		glShaderSource(fs, 1, &fragment_shader, NULL);
+	else
+		glShaderSource(fs, 1, &fragment_shader_nofilter, NULL);
 	glCompileShader(fs);
 	
 	shader_programme = glCreateProgram();
@@ -359,10 +366,18 @@ bool OpenGLFilter::Init(int W, int H, std::string name)
 		std::cerr << &infoLog[0] << std::endl;
 	}
 	
+	width = W;
+	height = H;
 	
 	return true; 
 	
     
+}
+
+
+void OpenGLFilter::MakeCurrent()
+{
+	glfwMakeContextCurrent(window);
 }
 
 
@@ -387,6 +402,11 @@ void OpenGLFilter::Update()
 	
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
+	
+	glUniform1i(glGetUniformLocation(shader_programme, "tex"), 0);
+	
+	glUniform1i(glGetUniformLocation(shader_programme, "WIDTH"), width);
+	glUniform1i(glGetUniformLocation(shader_programme, "HEIGHT"), height);
 	
 	glBindVertexArray(vao);
 	// draw points 0-3 from the currently bound VAO with current in-use shader

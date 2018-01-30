@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 		return 1; 
 	}
 	
-	float noiseProb = 0.8f;
+	float noiseProb = 0.1f;
 	
 	
 	
@@ -123,7 +123,11 @@ int main(int argc, char *argv[])
 	int W = pCodecCtx->width;
 	int H = pCodecCtx->height;
 	OpenGLFilter glFilter;
-	glFilter.Init(W, H, "median filter");
+	glFilter.Init(W, H, "filter", true);
+	
+	OpenGLFilter glNoFilter;
+	glNoFilter.Init(W, H, "no filter");
+	
 	
 	while(av_read_frame(pFormatCtx, &packet) >= 0) 
 	{
@@ -147,13 +151,21 @@ int main(int argc, char *argv[])
 			{
 				float number = (float)fast_rand() / 32767.0f;
 				
-				if(number < noiseProb)
+				if(number < noiseProb/2)
+					buffer[i] = 0; 
+				else if(number < noiseProb)
 					buffer[i] = 255; 
 			}
 			
+			glFilter.MakeCurrent();
 			glFilter.CopyImageData(pFrameRGB->data[0], W, H);
 			glFilter.Update();
 			if(glFilter.QuitPressed()) break; 
+			
+			glNoFilter.MakeCurrent();
+			glNoFilter.CopyImageData(pFrameRGB->data[0], W, H);
+			glNoFilter.Update();
+			if(glNoFilter.QuitPressed()) break; 
 		}
 	  }
 		
@@ -161,7 +173,13 @@ int main(int argc, char *argv[])
 	  av_free_packet(&packet);
 	}	
 	
+	glFilter.MakeCurrent();
 	glFilter.Stop();
+	
+	glNoFilter.MakeCurrent();
+	glNoFilter.Stop();
+	
+	
 	
 	return 1;
 }
